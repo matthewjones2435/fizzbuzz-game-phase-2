@@ -1,10 +1,13 @@
 package edu.cnm.deepdive.fizzbuzz.model;
 
 import androidx.annotation.NonNull;
+import java.io.Serializable;
 
-public class Round {
+public class Round implements Serializable {
+
 
   public static final String FORMAT_STRING = "%1$d (%2$s); selection: %3$s";
+  private static final long serialVersionUID = 4180175544896581305L;
   private final int value;
   private final Category category;
   private final Category selection;
