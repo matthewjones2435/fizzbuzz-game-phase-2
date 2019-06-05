@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.preference.PreferenceManager;
@@ -54,8 +55,8 @@ public class MainActivity extends AppCompatActivity
   private int gameDuration;
   private long gameTimerStart;
   private long gameTimeElapsed;
-  String gameDataKey;
-  String gameTimeElapsedKey;
+  private String gameDataKey;
+  private String gameTimeElapsedKey;
   /**
    * Initializes this activity when created, and when restored after {@link #onDestroy()} (for
    * example, after a change of orientation). In the latter case, the game state is retrieved from
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity
         game = new Game(timeLimit, numDigits, gameDuration);
         gameTimeElapsed = 0;
         complete = false;
+        Toast.makeText(this, R.string.reset_message, Toast.LENGTH_LONG).show();
         pauseGame();
         break;
       case R.id.play:
@@ -177,15 +179,19 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
         break;
       case R.id.status:
-        intent = new Intent(this, StatusActivity.class);
-        intent.putExtra(getString(R.string.game_data_key), game);
-        startActivity(intent);
+        showStats();
         break;
       default:
         handled = super.onOptionsItemSelected(item);
         break;
     }
     return handled;
+  }
+
+  private void showStats() {
+    Intent intent = new Intent(this, StatusActivity.class);
+    intent.putExtra(getString(R.string.game_data_key), game);
+    startActivity(intent);
   }
 
   /**
@@ -333,7 +339,7 @@ public class MainActivity extends AppCompatActivity
 
   private void startGameTimer () {
     gameTimer = new Timer();
-    gameTimer.schedule(new GameTimeout(),1000L* gameDuration - gameTimeElapsed);
+    gameTimer.schedule(new GameTimeout(),1000L * gameDuration - gameTimeElapsed);
     gameTimerStart = System.currentTimeMillis();
   }
 
@@ -354,7 +360,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void run() {
       complete = true;
-     runOnUiThread(() ->pauseGame());
+     runOnUiThread(() ->{
+       pauseGame();
+       Toast.makeText(MainActivity.this,R.string.game_over_toast, Toast.LENGTH_LONG).show();
+       showStats();
+     });
     }
 
   }

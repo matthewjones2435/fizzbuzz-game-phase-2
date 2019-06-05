@@ -21,6 +21,14 @@
 
   </style>
 
+  <style name="DirectionMarker" parent="AppTheme">
+    <item name = "android:textSize">36sp</item>
+    <item name = "android:textColor">@color/backgroundText</item>
+    <item name="android:includeFontPadding">false</item>
+    <item name="android:textStyle">bold</item>
+
+
+  </style>
 
 
 </resources>
