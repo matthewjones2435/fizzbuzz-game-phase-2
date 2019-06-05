@@ -22,7 +22,7 @@
   <ImageView
     android:id="@+id/incorrect_fizzbuzz_indicator"
     android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_height="@dimen/indicator_size"
     android:src="@drawable/incorrect_indicator"
     android:visibility="visible"
     android:alpha="0"
@@ -42,8 +42,8 @@
 
   <ImageView
     android:id="@+id/correct_fizz_indicator"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="@dimen/indicator_size"
+    android:layout_height="@dimen/indicator_size"
     android:src="@drawable/correct_indicator"
     android:visibility="visible"
     android:alpha="0"
@@ -54,8 +54,8 @@
 
   <ImageView
     android:id="@+id/incorrect_fizz_indicator"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="@dimen/indicator_size"
+    android:layout_height="@dimen/indicator_size"
     android:src="@drawable/incorrect_indicator"
     android:visibility="visible"
     android:alpha="0"
@@ -92,8 +92,8 @@
 
   <ImageView
     android:id="@+id/correct_buzz_indicator"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="@dimen/indicator_size"
+    android:layout_height="@dimen/indicator_size"
     android:src="@drawable/correct_indicator"
     android:visibility="visible"
     android:alpha="0"
@@ -104,8 +104,8 @@
 
   <ImageView
     android:id="@+id/incorrect_buzz_indicator"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="@dimen/indicator_size"
+    android:layout_height="@dimen/indicator_size"
     android:src="@drawable/incorrect_indicator"
     android:visibility="visible"
     android:alpha="0"
@@ -125,8 +125,8 @@
 
   <ImageView
     android:id="@+id/correct_neither_indicator"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="@dimen/indicator_size"
+    android:layout_height="@dimen/indicator_size"
     android:src="@drawable/correct_indicator"
     android:visibility="visible"
     android:alpha="0"
@@ -137,8 +137,8 @@
 
   <ImageView
     android:id="@+id/incorrect_neither_indicator"
-    android:layout_width="100dp"
-    android:layout_height="100dp"
+    android:layout_width="@dimen/indicator_size"
+    android:layout_height="@dimen/indicator_size"
     android:src="@drawable/incorrect_indicator"
     android:visibility="visible"
     android:alpha="0"

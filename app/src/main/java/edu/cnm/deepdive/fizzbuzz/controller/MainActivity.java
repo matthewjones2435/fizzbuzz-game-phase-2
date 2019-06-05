@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity
       gameTimeElapsed = savedInstanceState.getLong(gameTimeElapsedKey, 0);
     }
     if (game == null){
-      game = new Game(timeLimit, numDigits, gameDuration);
+      initGame();
     }
   }
 
@@ -162,9 +162,7 @@ public class MainActivity extends AppCompatActivity
     switch (item.getItemId()) {
       case R.id.reset:
         // TODO combine invocations of Game constructor.
-        game = new Game(timeLimit, numDigits, gameDuration);
-        gameTimeElapsed = 0;
-        complete = false;
+        initGame();
         Toast.makeText(this, R.string.reset_message, Toast.LENGTH_LONG).show();
         pauseGame();
         break;
@@ -228,7 +226,7 @@ public class MainActivity extends AppCompatActivity
   public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
     readSettings();
     pauseGame();
-    game = new Game(timeLimit,numDigits,gameDuration);
+    initGame();
 
   }
 
@@ -254,7 +252,7 @@ public class MainActivity extends AppCompatActivity
   private void resumeGame() {
     running = true;
     if (game == null) {
-      game = new Game(timeLimit, numDigits, gameDuration);
+      initGame();
       gameTimeElapsed = 0;
     }
     updateValue();
@@ -431,6 +429,12 @@ public class MainActivity extends AppCompatActivity
       }
       return handled;
     }
+
+  }
+  private void initGame() {
+    Game game = new Game(timeLimit,numDigits,gameDuration);
+    complete = false;
+    gameTimeElapsed = 0;
 
   }
 
