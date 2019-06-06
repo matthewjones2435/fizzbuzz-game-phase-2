@@ -31,5 +31,11 @@
 
   </style>
 
+  <style name="ClockDisplay" parent="AppTheme">
+    <item name="android:textColor">@color/darkText</item>
+    <item name="android:textSize">28sp</item>
+    <item name="android:includeFontPadding">false</item>
+    <item name="android:padding">4dp</item>
+  </style>
 
 </resources>

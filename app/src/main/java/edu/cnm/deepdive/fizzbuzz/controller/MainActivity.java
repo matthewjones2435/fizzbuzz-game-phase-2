@@ -43,11 +43,13 @@ public class MainActivity extends AppCompatActivity
   private boolean running;
   private boolean complete;
   private TextView valueDisplay;
+  private TextView clockDisplay;
   private ViewGroup valueContainer;
   private Rect displayRect = new Rect();
   private GestureDetectorCompat detector;
   private Timer valueTimer;
   private Timer gameTimer;
+  private Timer clockTimer;
   private SharedPreferences preferences;
   private Game game;
   private int numDigits;
@@ -57,6 +59,7 @@ public class MainActivity extends AppCompatActivity
   private long gameTimeElapsed;
   private String gameDataKey;
   private String gameTimeElapsedKey;
+  private String  clockFormat;
   /**
    * Initializes this activity when created, and when restored after {@link #onDestroy()} (for
    * example, after a change of orientation). In the latter case, the game state is retrieved from
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     valueDisplay = findViewById(R.id.value_display);
+    clockDisplay = findViewById(R.id.clock_display);
     valueContainer = (ViewGroup) valueDisplay.getParent();
     detector = new GestureDetectorCompat(this, new FlingListener());
     valueContainer.setOnTouchListener(this);
@@ -77,9 +81,12 @@ public class MainActivity extends AppCompatActivity
     readSettings();
      gameDataKey = getString(R.string.game_data_key);
      gameTimeElapsedKey = getString(R.string.game_time_elapsed_key);
+     clockFormat = getString(R.string.clock_format);
     if (savedInstanceState != null){
       game = (Game) savedInstanceState.getSerializable(gameDataKey);
       gameTimeElapsed = savedInstanceState.getLong(gameTimeElapsedKey, 0);
+      gameTimerStart = System.currentTimeMillis();
+      updateClock();
     }
     if (game == null){
       initGame();
@@ -245,7 +252,6 @@ public class MainActivity extends AppCompatActivity
     stopValueTimer();
     stopGameTimer();
     valueDisplay.setText("");
-    // TODO Update any additional necessary fields.
     invalidateOptionsMenu();
   }
 
@@ -253,7 +259,6 @@ public class MainActivity extends AppCompatActivity
     running = true;
     if (game == null) {
       initGame();
-      gameTimeElapsed = 0;
     }
     updateValue();
     startGameTimer();
@@ -274,6 +279,10 @@ public class MainActivity extends AppCompatActivity
       gameTimer.cancel();
       gameTimer = null;
       gameTimeElapsed += System.currentTimeMillis() - gameTimerStart;
+    }
+    if (clockTimer != null) {
+      clockTimer.cancel();
+      clockTimer = null;
     }
   }
 
@@ -339,7 +348,26 @@ public class MainActivity extends AppCompatActivity
     gameTimer = new Timer();
     gameTimer.schedule(new GameTimeout(),1000L * gameDuration - gameTimeElapsed);
     gameTimerStart = System.currentTimeMillis();
+    clockTimer = new Timer();
+    clockTimer.schedule(new ClockTimerTask(), 0, 100);
   }
+
+  private void updateClock() {
+    long remaining = (running || gameTimeElapsed > 0)?
+        gameDuration * 1000L - (System.currentTimeMillis() - gameTimerStart + gameTimeElapsed) :
+        gameDuration * 1000L;
+    int minutes;
+    double seconds;
+    if (remaining > 0) {
+      minutes = (int) (remaining / 60_000);
+      seconds = (remaining % 60_000) / 1000.0;
+    } else {
+      minutes = 0;
+      seconds = 0;
+    }
+    clockDisplay.setText(String.format(clockFormat, minutes, seconds));
+  }
+
 
   private class TimeoutTask extends TimerTask {
 
@@ -365,6 +393,14 @@ public class MainActivity extends AppCompatActivity
      });
     }
 
+  }
+
+  private class ClockTimerTask extends TimerTask {
+
+    @Override
+    public void run() {
+      runOnUiThread(() -> updateClock());
+    }
   }
 
   private class FlingListener extends GestureDetector.SimpleOnGestureListener {
@@ -432,9 +468,11 @@ public class MainActivity extends AppCompatActivity
 
   }
   private void initGame() {
-    Game game = new Game(timeLimit,numDigits,gameDuration);
+    game = new Game(timeLimit,numDigits,gameDuration);
     complete = false;
     gameTimeElapsed = 0;
+    gameTimerStart = System.currentTimeMillis();
+    updateClock();
 
   }
 
